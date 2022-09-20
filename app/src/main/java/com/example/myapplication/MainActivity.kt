@@ -23,16 +23,11 @@ class MainActivity : AppCompatActivity() {
         //bd.execSQL("DROP TABLE data")
         bd.execSQL("Create Table if not exists data (data TEXT NOT NULL, description TEXT NOT NULL)")
 
-
         val pm = packageManager
         val pi = pm.getPackageInfo(packageName, 0)
         if (pi != null) {
-            bd.execSQL("Create Table if not exists data (data TEXT NOT NULL, description TEXT NOT NULL)")
+            hp.createDate(bd, "20.9.2022", "ооо, Спидран по Календарю!", "data")
         }
-
-
-
-        hp.createDate(bd, "20.9.2022", "ооо, Спидран по Календарю!", "data")
 
         cal.setOnDateChangeListener { view, year, month, dayOfMonth ->
             var m = month + 1

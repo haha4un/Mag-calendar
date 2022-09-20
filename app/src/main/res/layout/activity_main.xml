@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:windowNoTitle="true">
 
     <CalendarView
         android:id="@+id/y"
@@ -12,33 +13,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/purple_500"
-        android:backgroundTint="#C8515151"
-
-        android:focusedMonthDateColor="#00EDEDED"
+        android:background="@color/white"
         android:maxDate="12/31/2022"
         android:minDate="1/1/2022"
-
-        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UnusedAttribute" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:background="@color/teal_700"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/y">
 
@@ -53,13 +44,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="70mm"
-                android:background="#C8515151"
-                android:backgroundTint="#C8515151"
+                android:background="#FFFFFF"
                 android:fontFamily="@font/activist"
-                android:shadowColor="@color/black"
                 android:shadowRadius="11"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="40dp"></TextView>
         </LinearLayout>
     </ScrollView>
