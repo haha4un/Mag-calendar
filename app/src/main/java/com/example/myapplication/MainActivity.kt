@@ -1,12 +1,13 @@
 package com.example.myapplication
 
 import android.database.sqlite.SQLiteDatabase
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,15 @@ class MainActivity : AppCompatActivity() {
         //bd.execSQL("DROP TABLE data")
         bd.execSQL("Create Table if not exists data (data TEXT NOT NULL, description TEXT NOT NULL)")
 
-        if ()
+
+        val pm = packageManager
+        val pi = pm.getPackageInfo(packageName, 0)
+        if (pi != null) {
+            bd.execSQL("Create Table if not exists data (data TEXT NOT NULL, description TEXT NOT NULL)")
+        }
+
+
+
         hp.createDate(bd, "20.9.2022", "ооо, Спидран по Календарю!", "data")
 
         cal.setOnDateChangeListener { view, year, month, dayOfMonth ->
