@@ -2,11 +2,15 @@ package com.example.myapplication
 
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
-import android.widget.CalendarView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.provider.ContactsContract
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import java.lang.Error
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,45 +22,65 @@ class MainActivity : AppCompatActivity() {
         // var scroll: LinearLayout = findViewById(R.id.scrooler)
         var txt: TextView = findViewById(R.id.txt)
 
-        var hp: dbhelp = dbhelp()
-        var bd: SQLiteDatabase = baseContext.openOrCreateDatabase("dates", MODE_PRIVATE, null)
-        //bd.execSQL("DROP TABLE data")
-        bd.execSQL("Create Table if not exists data (data TEXT NOT NULL, description TEXT NOT NULL)")
+        var database = Firebase.database
+        var myRef = database.getReference("data")
+        var dates = ArrayList<String>()
+        var desriptions = ArrayList<String>()
 
-        val pm = packageManager
-        val pi = pm.getPackageInfo(packageName, 0)
-        if (pi != null) {
-            hp.createDate(bd, "20.9.2022", "ооо, Спидран по Календарю!", "data")
-        }
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                if (dates.size>0)
+//                    dates.clear()
+                for (i in dataSnapshot.children)
+                {
+                    var fbe = i.getValue(fb().javaClass)
+                    dates.add(fbe?.getDates().toString())
+                    desriptions.add(fbe?.getDescription().toString())
+
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
 
         cal.setOnDateChangeListener { view, year, month, dayOfMonth ->
             var m = month + 1
             var key = "$dayOfMonth.$m"
             var scrool: LinearLayout = findViewById(R.id.scrooler)
 
-            getDates(txt, "$dayOfMonth.$m")
+            try {
+            getDates(txt, "$dayOfMonth-$m", dates, desriptions)}
+            catch (E: IndexOutOfBoundsException)
+            {
+                Toast.makeText(this, "ошибка: $E", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnDateChangeListener
+            }
+
+            try {
             for (i in m..12) {
                 for (k in dayOfMonth..30) {
-                    if (getAdvice(txt, "$k.$m")) {
+                    if (getAdvice("$k-$m", dates)) {
                         Toast.makeText(this, "самое ближнее событие: $k.$m", Toast.LENGTH_SHORT)
                             .show()
                         return@setOnDateChangeListener
                     }
                 }
             }
+            }
+            catch (E: IndexOutOfBoundsException){
+                return@setOnDateChangeListener
+            }
         }
     }
 
     fun getAdvice(
-        txt: TextView,
-        key: String
+        key: String,
+        list: ArrayList<String>
     ): Boolean {
-        var hp: dbhelp = dbhelp()
-        var bd: SQLiteDatabase = baseContext.openOrCreateDatabase("dates", MODE_PRIVATE, null)
-
-        var arr = hp.tableToarr(bd, "data",  0)
-        for (i in 0..arr.size - 1) {
-            var open = arr[i].dropLastWhile { it != '.' }.dropLast(1)
+        for (i in 0..list.size-1) {
+            var open = list[i].dropLastWhile { it != '-' }.dropLast(1)
             if (open == key)
                 return true
         }
@@ -65,18 +89,16 @@ class MainActivity : AppCompatActivity() {
 
     fun getDates(
         txt: TextView,
-        key: String
+        key: String,
+        dates: ArrayList<String>,
+        desc: ArrayList<String>,
+        scroller: LinearLayout
     ){
-        var hp: dbhelp = dbhelp()
-        var bd: SQLiteDatabase = baseContext.openOrCreateDatabase("dates", MODE_PRIVATE, null)
-
-        var arr = hp.tableToarr(bd, "data",  0)
-        var a2rr = hp.tableToarr(bd, "data",  1)
-        var str = ""
-        for (i in 0..arr.size - 1) {
-            var open = arr[i].dropLastWhile { it != '.' }.dropLast(1)
+        var str=""
+        for (i in 0..dates.size -1) {
+            var open = dates[i].dropLastWhile { it != '-' }.dropLast(1)
             if (open == key)
-                str+= "${arr[i]}\n${a2rr[i]}\n\n"
+                str+= "${dates[i]}\n${desc[i]}\n\n"
         }
         txt.text = str
     }

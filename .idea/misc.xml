@@ -3,9 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ball.xml" value="0.2965" />
+        <entry key="app/src/main/res/drawable-v24/ball22.xml" value="0.184" />
+        <entry key="app/src/main/res/drawable-v24/ed_bg.xml" value="0.184" />
         <entry key="app/src/main/res/font/cantata_one.xml" value="0.20520833333333333" />
+        <entry key="app/src/main/res/layout-v21/activity.xml" value="0.17447916666666666" />
         <entry key="app/src/main/res/layout-v21/activity_main.xml" value="0.13854166666666667" />
+        <entry key="app/src/main/res/layout-v21/календарь - mainActivity.xml" value="0.17421875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17057291666666666" />
+        <entry key="app/src/main/res/layout/df.xml" value="0.17395833333333333" />
+        <entry key="app/src/main/res/layout/zag.xml" value="0.22" />
       </map>
     </option>
   </component>
