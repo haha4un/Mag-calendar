@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         // var scroll: LinearLayout = findViewById(R.id.scrooler)
 
         var database = Firebase.database
-        var myRef = database.getReference("data")
+        var myRef = database.getReference("date")
         var dates = ArrayList<String>()
         var desriptions = ArrayList<String>()
         var imgs = ArrayList<String>()
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             try {
             for (i in m..12) {
                 for (k in dayOfMonth..30) {
-                    if (getAdvice("$k-$m", dates)) {
+                    if (getAdvice("$k.$m", dates)) {
                         Toast.makeText(this, "Самое ближнее событие: $k.$m", Toast.LENGTH_SHORT)
                             .show()
                         return@setOnDateChangeListener
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         scrool: LinearLayout
     ){
         for (i in 0..dates.size -1) {
-            var open = dates[i].dropLastWhile { it != '-' }.dropLast(1)
+            var open = dates[i].dropLastWhile { it != '.' }.dropLast(1)
             if (open == key) {
                 var txt: TextView = TextView(this)
                 val face = ResourcesCompat.getFont(this, R.font.activist);
@@ -113,9 +113,9 @@ class MainActivity : AppCompatActivity() {
                 txt.textSize = 40f
 
 
-                var str = sentData(dates[i].dropLastWhile { it != '-' }.dropLast(1).dropLastWhile { it != '-' }.dropLast(1).toInt(),
-                    dates[i].dropLastWhile { it != '-' }.dropLast(1).dropWhile { it != '-' }.drop(1).toInt(),
-                    dates[i].dropWhile { it != '-' }.drop(1).dropWhile { it != '-' }.drop(1).toInt())
+                var str = sentData(dates[i].dropLastWhile { it != '.' }.dropLast(1).dropLastWhile { it != '.' }.dropLast(1).toInt(),
+                    dates[i].dropLastWhile { it != '.' }.dropLast(1).dropWhile { it != '.' }.drop(1).toInt(),
+                    dates[i].dropWhile { it != '.' }.drop(1).dropWhile { it != '.' }.drop(1).toInt())
                 txt.text = "${str}\n${desc[i]}\n\n"
                 scrool.addView(txt)
                 if (imgs[i] != "null")

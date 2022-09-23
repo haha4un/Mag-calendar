@@ -30,6 +30,3 @@
         app:srcCompat="@drawable/a" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
