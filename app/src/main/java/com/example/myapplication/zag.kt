@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 
 class zag : AppCompatActivity() {
@@ -9,8 +10,10 @@ class zag : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_zag)
 
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+        Handler().postDelayed({
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 2000)
     }
 }

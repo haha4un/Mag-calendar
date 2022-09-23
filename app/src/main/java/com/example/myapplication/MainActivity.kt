@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             try {
-            getDates("$dayOfMonth-$m", dates, desriptions, imgs, scrool)}
+            getDates("$dayOfMonth.$m", dates, desriptions, imgs, scrool)}
             catch (E: IndexOutOfBoundsException)
             {
                 Toast.makeText(this, "Ошибка: $E", Toast.LENGTH_SHORT)
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         list: ArrayList<String>
     ): Boolean {
         for (i in 0..list.size-1) {
-            var open = list[i].dropLastWhile { it != '-' }.dropLast(1)
+            var open = list[i].dropLastWhile { it != '.' }.dropLast(1)
             if (open == key)
                 return true
         }
