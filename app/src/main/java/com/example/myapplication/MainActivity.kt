@@ -1,16 +1,19 @@
 package com.example.myapplication
 
-import android.database.sqlite.SQLiteDatabase
+import android.content.Context
+import android.graphics.Typeface
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.lang.Error
+import com.squareup.picasso.Picasso
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,12 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         var cal: CalendarView = findViewById(R.id.y)
         // var scroll: LinearLayout = findViewById(R.id.scrooler)
-        var txt: TextView = findViewById(R.id.txt)
 
         var database = Firebase.database
         var myRef = database.getReference("data")
         var dates = ArrayList<String>()
         var desriptions = ArrayList<String>()
+        var imgs = ArrayList<String>()
 
         myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                     var fbe = i.getValue(fb().javaClass)
                     dates.add(fbe?.getDates().toString())
                     desriptions.add(fbe?.getDescription().toString())
+                    imgs.add(fbe?.getImage().toString())
 
                 }
             }
@@ -48,12 +52,18 @@ class MainActivity : AppCompatActivity() {
             var m = month + 1
             var key = "$dayOfMonth.$m"
             var scrool: LinearLayout = findViewById(R.id.scrooler)
+            scrool.removeAllViews()
+
+            if ( !isOnline(this) ){
+                Toast.makeText(this, "Подключитесь к интернету", Toast.LENGTH_SHORT).show();
+                return@setOnDateChangeListener
+            }
 
             try {
-            getDates(txt, "$dayOfMonth-$m", dates, desriptions)}
+            getDates("$dayOfMonth-$m", dates, desriptions, imgs, scrool)}
             catch (E: IndexOutOfBoundsException)
             {
-                Toast.makeText(this, "ошибка: $E", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Ошибка: $E", Toast.LENGTH_SHORT)
                     .show()
                 return@setOnDateChangeListener
             }
@@ -62,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             for (i in m..12) {
                 for (k in dayOfMonth..30) {
                     if (getAdvice("$k-$m", dates)) {
-                        Toast.makeText(this, "самое ближнее событие: $k.$m", Toast.LENGTH_SHORT)
+                        Toast.makeText(this, "Самое ближнее событие: $k.$m", Toast.LENGTH_SHORT)
                             .show()
                         return@setOnDateChangeListener
                     }
@@ -88,18 +98,58 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getDates(
-        txt: TextView,
         key: String,
         dates: ArrayList<String>,
         desc: ArrayList<String>,
-        scroller: LinearLayout
+        imgs: ArrayList<String>,
+        scrool: LinearLayout
     ){
-        var str=""
         for (i in 0..dates.size -1) {
             var open = dates[i].dropLastWhile { it != '-' }.dropLast(1)
-            if (open == key)
-                str+= "${dates[i]}\n${desc[i]}\n\n"
+            if (open == key) {
+                var txt: TextView = TextView(this)
+                val face = ResourcesCompat.getFont(this, R.font.activist);
+                txt.setTypeface(face)
+                txt.textSize = 40f
+
+
+                var str = sentData(dates[i].dropLastWhile { it != '-' }.dropLast(1).dropLastWhile { it != '-' }.dropLast(1).toInt(),
+                    dates[i].dropLastWhile { it != '-' }.dropLast(1).dropWhile { it != '-' }.drop(1).toInt(),
+                    dates[i].dropWhile { it != '-' }.drop(1).dropWhile { it != '-' }.drop(1).toInt())
+                txt.text = "${str}\n${desc[i]}\n\n"
+                scrool.addView(txt)
+                if (imgs[i] != "null")
+                {
+                    var img: ImageView = ImageView(this)
+                    Picasso.with(this).load(imgs[i]).placeholder(R.drawable.img).error(R.drawable.img).into(img)
+                    scrool.addView(img)
+                }
+            }
         }
-        txt.text = str
+    }
+
+    fun sentData(day: Int, mounth: Int, year: Int) : String
+    {
+        var str =""
+        if (day < 10)
+            str += "0${day.toString()}."
+        else
+            str+="$day."
+
+        if(mounth < 10)
+            str += "0${mounth.toString()}."
+        else
+            str+="$mounth."
+
+        str+= year.toString()
+
+        return str
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var activeNetworkInfo: NetworkInfo? = null
+        activeNetworkInfo = cm.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
 }

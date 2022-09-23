@@ -2,8 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="@color/cardview_dark_background"/>
-            <corners android:radius="10dp"/>
+            <solid android:color="#1F2229"/>
+            <corners android:bottomLeftRadius="30dp"
+                android:bottomRightRadius="30dp"/>
         </shape>
     </item>
 </selector>

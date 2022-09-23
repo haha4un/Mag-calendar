@@ -13,9 +13,9 @@
 
         android:layout_width="0dp"
         android:layout_height="500dp"
-        android:dateTextAppearance="@style/CalendarViewDateCustomText"
         android:layout_marginBottom="30dp"
-        android:background="#1F2229"
+        android:background="@drawable/ed_bg"
+        android:dateTextAppearance="@style/CalendarViewDateCustomText"
         android:maxDate="12/31/2022"
         android:minDate="1/1/2022"
         app:layout_constraintBottom_toTopOf="@+id/scrollView3"
@@ -38,19 +38,7 @@
             android:id="@+id/scrooler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="70mm"
-                android:fontFamily="@font/activist"
-                android:shadowRadius="11"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="40dp"></TextView>
-        </LinearLayout>
+            android:orientation="vertical"/>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
