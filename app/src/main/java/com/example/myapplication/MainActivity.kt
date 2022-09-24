@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         var database = Firebase.database
         var myRef = database.getReference("date")
         var dates = ArrayList<String>()
+        var tittle = ArrayList<String>()
         var desriptions = ArrayList<String>()
         var imgs = ArrayList<String>()
 
@@ -39,9 +40,9 @@ class MainActivity : AppCompatActivity() {
                 {
                     var fbe = i.getValue(fb().javaClass)
                     dates.add(fbe?.getDates().toString())
+                    tittle.add(fbe?.getTitles().toString())
                     desriptions.add(fbe?.getDescription().toString())
                     imgs.add(fbe?.getImage().toString())
-
                 }
             }
 
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             try {
-            getDates("$dayOfMonth.$m", dates, desriptions, imgs, scrool)}
+            getDates("$dayOfMonth.$m", dates,tittle, desriptions, imgs, scrool)}
             catch (E: IndexOutOfBoundsException)
             {
                 Toast.makeText(this, "Ошибка: $E", Toast.LENGTH_SHORT)
@@ -101,6 +102,7 @@ class MainActivity : AppCompatActivity() {
     fun getDates(
         key: String,
         dates: ArrayList<String>,
+        title: ArrayList<String>,
         desc: ArrayList<String>,
         imgs: ArrayList<String>,
         scrool: LinearLayout
@@ -117,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 var str = sentData(dates[i].dropLastWhile { it != '.' }.dropLast(1).dropLastWhile { it != '.' }.dropLast(1).toInt(),
                     dates[i].dropLastWhile { it != '.' }.dropLast(1).dropWhile { it != '.' }.drop(1).toInt(),
                     dates[i].dropWhile { it != '.' }.drop(1).dropWhile { it != '.' }.drop(1).toInt())
-                txt.text = "${str}\n${desc[i]}\n\n"
+                txt.text = "${str}: ${title[i]}-\n${desc[i]}\n\n"
                 scrool.addView(txt)
                 if (imgs[i] != "null")
                 {

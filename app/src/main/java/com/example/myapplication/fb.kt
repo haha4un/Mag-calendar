@@ -2,6 +2,7 @@ package com.example.myapplication
 
 class fb {
     var date: String? = null
+    var title: String? = null
     var desc: String? = null
     var img: String? = null
 
@@ -15,11 +16,12 @@ class fb {
         this.desc = desc
         this.img = img
     }
-
     fun getDates(): String? {
         return date
     }
-
+    fun getTitles(): String? {
+        return title
+    }
     fun getDescription(): String? {
         return desc
     }
