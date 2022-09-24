@@ -19,13 +19,14 @@ class MainActivity : AppCompatActivity() {
         var database = FirebaseDatabase.getInstance().getReference("date")
 
         var data: EditText = findViewById(R.id.data)
+        var title: EditText = findViewById(R.id.title)
         var desc: EditText = findViewById(R.id.desc)
         var url: EditText = findViewById(R.id.url)
         var button: Button = findViewById(R.id.btn_add)
 
         button.setOnClickListener()
         {
-            if (data.text.toString() == "" || desc.text.toString() == "") {
+            if (data.text.toString() == "" || desc.text.toString() == "" || title.text.toString() == "") {
                 Toast.makeText(this, "STATUS: error", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -33,13 +34,14 @@ class MainActivity : AppCompatActivity() {
             var database = FirebaseDatabase.getInstance().getReference("date")
 //            var id: String ?= database.key
             var date: String = data.text.toString()
+            var tit: String =  title.text.toString()
             var desc: String = desc.text.toString()
             var urls: String = url.text.toString()
             if (url.text.toString() == "")
                 urls = "null"
 
             var firebase: fb = fb()
-            firebase.fb(date, desc, urls)
+            firebase.fb(date = date,title = tit,desc = desc,img =urls)
 
             database.push().setValue(firebase)
 
